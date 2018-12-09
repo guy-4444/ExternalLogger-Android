@@ -4,6 +4,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,6 @@ import guy4444.externallogger.LoggerDB.MyLoggerDB;
 
 public class Activity_Main extends AppCompatActivity {
 
-    AppDatabase appDatabase;
     TextView text;
     Button button;
 
@@ -31,34 +31,7 @@ public class Activity_Main extends AppCompatActivity {
         text = (TextView) findViewById(R.id.text);
         button = (Button) findViewById(R.id.button);
 
-        //DatabaseInitializer.populateAsync(AppDatabase.getAppDatabase(this));
-
-        appDatabase = AppDatabase.getAppDatabase(this);
-
-        final Thread thread = new Thread(new Runnable() {
-            public void run() {
-                Log log = new Log(); log.setType("Click");log.setTime(System.currentTimeMillis());log.setText("Button Clicked");
-                appDatabase.logDao().insertAll(log);
-                List<Log> logs = appDatabase.logDao().getAll();
-                updateText(logs);
-            }
-        });
-
-        final Thread addThread = new Thread(new Runnable() {
-            public void run() {
-
-            }
-        });
-
-        final Thread printThread = new Thread(new Runnable() {
-            public void run() {
-
-            }
-        });
-
-
-
-
+        text.setMovementMethod(LinkMovementMethod.getInstance());
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,9 +39,19 @@ public class Activity_Main extends AppCompatActivity {
                 //thread.start();
 
                 Log log = new Log(); log.setType("Click");log.setTime(System.currentTimeMillis());log.setText("Button Clicked");
-                MyLoggerDB.getInstance().addLogToDB(log);
+                MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
+                    @Override
+                    public void onCompleted() {
+                        MyLoggerDB.getInstance().getAll(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+                            @Override
+                            public void logsReturned(List<Log> logs) {
+                                updateText(logs);
+                            }
+                        });
+                    }
+                });
 
-                MyLoggerDB.getInstance().getAll(new MyLoggerDB.LoggerDBCallBack() {
+                MyLoggerDB.getInstance().getAll(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
                     public void logsReturned(List<Log> logs) {
                         updateText(logs);
@@ -81,8 +64,16 @@ public class Activity_Main extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                MyLoggerDB.getInstance().deleteAll();
+                updateText(null);
+                Snackbar.make(view, "All data removed", Snackbar.LENGTH_LONG).setAction("got It", null).show();
+            }
+        });
+
+        MyLoggerDB.getInstance().getAll(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+            @Override
+            public void logsReturned(List<Log> logs) {
+                updateText(logs);
             }
         });
     }
@@ -114,19 +105,15 @@ public class Activity_Main extends AppCompatActivity {
             @Override
             public void run() {
                 String str = "";
-                Collections.sort(logs);
-                android.util.Log.d("pttt", "SIZE= " + logs.size());
-                for (int i = 0; i < logs.size(); i++) {
-                    str += logs.get(i).getUid() + ". " + logs.get(i).getTime() + " - " + logs.get(i).getType() + " " + logs.get(i).getText() + "\n";
+                if (logs != null) {
+                    Collections.sort(logs);
+                    android.util.Log.d("pttt", "SIZE= " + logs.size());
+                    for (int i = 0; i < logs.size(); i++) {
+                        str += logs.get(i).getUid() + ". " + logs.get(i).getTime() + " - " + logs.get(i).getType() + " " + logs.get(i).getText() + "\n";
+                    }
                 }
                 text.setText(str);
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        AppDatabase.destroyInstance();
-        super.onDestroy();
     }
 }

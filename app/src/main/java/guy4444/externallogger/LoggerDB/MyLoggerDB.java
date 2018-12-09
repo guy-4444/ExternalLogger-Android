@@ -14,6 +14,14 @@ import java.util.List;
 @Database(entities = {Log.class}, version = 1)
 public abstract class MyLoggerDB extends RoomDatabase {
 
+    public interface LoggerDBCallBack_LogsReturned {
+        public void logsReturned(List<Log> logs);
+    }
+
+    public interface LoggerDBCallBack_OnCompleted {
+        public void onCompleted();
+    }
+
     private static MyLoggerDB instance;
     private static Context appContext;
     public abstract LogDao logDao();
@@ -34,6 +42,10 @@ public abstract class MyLoggerDB extends RoomDatabase {
         return instance;
     }
 
+    public static void destroyInstance() {
+        instance = null;
+    }
+
     public void showToast(final String message) {
         // If we put it into handler - we can call in from asynctask outside of main uithread
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -44,26 +56,32 @@ public abstract class MyLoggerDB extends RoomDatabase {
         });
     }
 
-    public void addLogToDB(final Log log) {
+    public void addLogToDB(final Log log, final LoggerDBCallBack_OnCompleted loggerDBCallBack_onCompleted) {
         new Thread(new Runnable() {
             public void run() {
                 logDao().insertAll(log);
-            }
-        }).start();
-    }
-
-
-    public void getAll(final LoggerDBCallBack loggerDBCallBack) {
-        new Thread(new Runnable() {
-            public void run() {
-                if (loggerDBCallBack != null) {
-                    loggerDBCallBack.logsReturned(logDao().getAll());
+                if (loggerDBCallBack_onCompleted != null) {
+                    loggerDBCallBack_onCompleted.onCompleted();
                 }
             }
         }).start();
     }
 
-    public interface LoggerDBCallBack {
-        public void logsReturned(List<Log> logs);
+    public void getAll(final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAll());
+                }
+            }
+        }).start();
+    }
+
+    public void deleteAll() {
+        new Thread(new Runnable() {
+            public void run() {
+                logDao().deleteAll();
+            }
+        }).start();
     }
 }
