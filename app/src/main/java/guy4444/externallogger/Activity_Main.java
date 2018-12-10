@@ -4,6 +4,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,29 +21,42 @@ import guy4444.externallogger.LoggerDB.MyLoggerDB;
 
 public class Activity_Main extends AppCompatActivity {
 
-    TextView text;
-    Button button;
+    private TextView text;
+    private Button btn1;
+    private Button btn2;
+    private Button btn3;
+    private Button btn4;
+    private FloatingActionButton fab1;
+    private FloatingActionButton fab2;
+    private long lastCreateDate = System.currentTimeMillis();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mActionBarToolbar);
+        getSupportActionBar().setTitle("External Logger Demo App");
+
         text = (TextView) findViewById(R.id.text);
-        button = (Button) findViewById(R.id.button);
+        btn1 = (Button) findViewById(R.id.btn1);
+        btn2 = (Button) findViewById(R.id.btn2);
+        btn3 = (Button) findViewById(R.id.btn3);
+        btn4 = (Button) findViewById(R.id.btn4);
+        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
 
         text.setMovementMethod(LinkMovementMethod.getInstance());
 
-        button.setOnClickListener(new View.OnClickListener() {
+        btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //thread.start();
-
-                Log log = new Log(); log.setType("Click");log.setTime(System.currentTimeMillis());log.setText("Button Clicked");
+                Log log = new Log("Click", "Button Clicked");
                 MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
                     @Override
                     public void onCompleted() {
-                        MyLoggerDB.getInstance().getAll(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+                        MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                             @Override
                             public void logsReturned(List<Log> logs) {
                                 updateText(logs);
@@ -50,8 +64,13 @@ public class Activity_Main extends AppCompatActivity {
                         });
                     }
                 });
+            }
+        });
 
-                MyLoggerDB.getInstance().getAll(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
                     public void logsReturned(List<Log> logs) {
                         updateText(logs);
@@ -60,8 +79,49 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyLoggerDB.getInstance().getAllLogsByTag("Fab", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+                    @Override
+                    public void logsReturned(List<Log> logs) {
+                        updateText(logs);
+                    }
+                });
+            }
+        });
+
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyLoggerDB.getInstance().getAllLogsFromDate(lastCreateDate, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+                    @Override
+                    public void logsReturned(List<Log> logs) {
+                        updateText(logs);
+                    }
+                });
+            }
+        });
+
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log log = new Log("fab", "Button Clicked");
+                MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
+                    @Override
+                    public void onCompleted() {
+                        MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+                            @Override
+                            public void logsReturned(List<Log> logs) {
+                                updateText(logs);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MyLoggerDB.getInstance().deleteAll();
@@ -70,7 +130,7 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
 
-        MyLoggerDB.getInstance().getAll(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+        MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
             @Override
             public void logsReturned(List<Log> logs) {
                 updateText(logs);
@@ -80,19 +140,13 @@ public class Activity_Main extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_activity_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -104,12 +158,20 @@ public class Activity_Main extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss");
                 String str = "";
                 if (logs != null) {
                     Collections.sort(logs);
                     android.util.Log.d("pttt", "SIZE= " + logs.size());
                     for (int i = 0; i < logs.size(); i++) {
-                        str += logs.get(i).getUid() + ". " + logs.get(i).getTime() + " - " + logs.get(i).getType() + " " + logs.get(i).getText() + "\n";
+                        str += logs.get(i).getUid()
+                                + ". "
+                                + sdf.format(logs.get(i).getTime())
+                                + " - "
+                                + logs.get(i).getTag()
+                                + " "
+                                + logs.get(i).getText()
+                                + "\n";
                     }
                 }
                 text.setText(str);

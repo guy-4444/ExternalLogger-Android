@@ -11,13 +11,34 @@ import java.util.List;
 public interface LogDao {
 
     @Query("SELECT * FROM logs_table")
-    List<Log> getAll();
+    List<Log> getAllLogs();
 
-    @Query("SELECT * FROM logs_table where type LIKE  :type")
-    List<Log> getAll(String type);
+    @Query("SELECT * FROM logs_table WHERE time BETWEEN :start AND :end")
+    List<Log> getAllLogsBetweenDates(long start, long end);
 
-    @Query("SELECT * FROM logs_table where type LIKE  :type AND text LIKE :text")
-    Log findByName(String type, String text);
+    @Query("SELECT * FROM logs_table WHERE time > :start")
+    List<Log> getAllLogsFromDate(long start);
+
+
+    @Query("SELECT * FROM logs_table where tag LIKE :tag")
+    List<Log> getAllLogsByTag(String tag);
+
+    @Query("SELECT * FROM logs_table WHERE tag LIKE :tag AND time BETWEEN :start AND :end")
+    List<Log> getAllLogsByTagBetweenDates(long start, long end, String tag);
+
+    @Query("SELECT * FROM logs_table WHERE tag LIKE :tag AND time > :start")
+    List<Log> getAllLogsByTagFromDate(long start, String tag);
+
+
+    @Query("SELECT * FROM logs_table where tag LIKE :tag AND text LIKE :text")
+    List<Log> getAllLogsByTagAndText(String tag, String text);
+
+    @Query("SELECT * FROM logs_table where tag LIKE :tag AND text LIKE :text AND time BETWEEN :start AND :end")
+    List<Log> getAllLogsByTagAndTextBetweenDates(long start, long end, String tag, String text);
+
+    @Query("SELECT * FROM logs_table where tag LIKE :tag AND text LIKE :text AND time > :start")
+    List<Log> getAllLogsByTagAndTextFromDate(long start, String tag, String text);
+
 
     @Query("SELECT COUNT(*) from logs_table")
     int countLogs();

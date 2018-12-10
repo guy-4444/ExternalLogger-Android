@@ -1,6 +1,7 @@
 package guy4444.externallogger.LoggerDB;
 
 import android.arch.persistence.room.Database;
+import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
@@ -67,16 +68,6 @@ public abstract class MyLoggerDB extends RoomDatabase {
         }).start();
     }
 
-    public void getAll(final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
-        new Thread(new Runnable() {
-            public void run() {
-                if (loggerDBCallBack_logsReturned != null) {
-                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAll());
-                }
-            }
-        }).start();
-    }
-
     public void deleteAll() {
         new Thread(new Runnable() {
             public void run() {
@@ -84,4 +75,95 @@ public abstract class MyLoggerDB extends RoomDatabase {
             }
         }).start();
     }
+
+    public void getAllLogs(final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogs());
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsBetweenDates(final long start, final long end, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsBetweenDates(start, end));
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsFromDate(final long start, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsFromDate(start));
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsByTag(final String tag, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsByTag(tag));
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsByTagBetweenDates(final long start, final long end, final String tag, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsByTagBetweenDates(start, end, tag));
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsByTagFromDate(final long start, final String tag, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsByTagFromDate(start, tag));
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsByTagAndText(final String tag, final String text, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsByTagAndText(tag, text));
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsByTagAndTextBetweenDates(final long start, final long end, final String tag, final String text, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsByTagAndTextBetweenDates(start, end, tag, text));
+                }
+            }
+        }).start();
+    }
+
+    public void getAllLogsByTagAndTextFromDate(final long start, final String tag, final String text, final LoggerDBCallBack_LogsReturned loggerDBCallBack_logsReturned) {
+        new Thread(new Runnable() {
+            public void run() {
+                if (loggerDBCallBack_logsReturned != null) {
+                    loggerDBCallBack_logsReturned.logsReturned(logDao().getAllLogsByTagAndTextFromDate(start, tag, text));
+                }
+            }
+        }).start();
+    }
+
 }

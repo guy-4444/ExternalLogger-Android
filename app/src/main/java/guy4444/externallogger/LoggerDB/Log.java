@@ -11,13 +11,18 @@ public class Log implements Comparable<Log> {
     private int uid;
 
     @ColumnInfo(name = "time")
-    private long time;
+    private long time = System.currentTimeMillis();
 
-    @ColumnInfo(name = "type")
-    private String type;
+    @ColumnInfo(name = "tag")
+    private String tag;
 
     @ColumnInfo(name = "text")
     private String text;
+
+    public Log(String tag, String text) {
+        this.tag = tag;
+        this.text = text;
+    }
 
     public int getUid() {
         return uid;
@@ -27,12 +32,12 @@ public class Log implements Comparable<Log> {
         this.uid = uid;
     }
 
-    public String getType() {
-        return type;
+    public String getTag() {
+        return tag;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public long getTime() {
