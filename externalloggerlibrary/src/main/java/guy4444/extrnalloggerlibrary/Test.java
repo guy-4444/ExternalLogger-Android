@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class Test {
 
-    public void test() {
+    public static void test() {
         Log.d("pttt", "tested successfully");
     }
 }
