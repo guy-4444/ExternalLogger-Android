@@ -24,7 +24,7 @@ local.properties
 proguard/
 
 # Log Files
-*.log
+*.extLog
 
 # Android Studio Navigation editor temp files
 .navigation/

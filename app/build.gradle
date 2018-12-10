@@ -40,4 +40,5 @@ dependencies {
     // Lifecycle components
     implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
+    compile project(path: ':externalloggerlibrary')
 }

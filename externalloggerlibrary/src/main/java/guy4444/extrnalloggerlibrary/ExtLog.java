@@ -1,11 +1,11 @@
-package guy4444.externallogger.LoggerDB;
+package guy4444.extrnalloggerlibrary;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "logs_table")
-public class Log implements Comparable<Log> {
+public class ExtLog implements Comparable<ExtLog> {
 
     @PrimaryKey(autoGenerate = true)
     private int uid;
@@ -19,7 +19,7 @@ public class Log implements Comparable<Log> {
     @ColumnInfo(name = "text")
     private String text;
 
-    public Log(String tag, String text) {
+    public ExtLog(String tag, String text) {
         this.tag = tag;
         this.text = text;
     }
@@ -57,7 +57,7 @@ public class Log implements Comparable<Log> {
     }
 
     @Override
-    public int compareTo(Log o) {
+    public int compareTo(ExtLog o) {
         return this.time > o.time ? 1 : -1;
     }
 }

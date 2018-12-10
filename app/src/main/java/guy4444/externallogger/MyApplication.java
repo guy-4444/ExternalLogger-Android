@@ -2,8 +2,7 @@ package guy4444.externallogger;
 
 import android.app.Application;
 
-import guy4444.externallogger.LoggerDB.MyLoggerDB;
-
+import guy4444.extrnalloggerlibrary.MyLoggerDB;
 
 public class MyApplication extends Application {
 

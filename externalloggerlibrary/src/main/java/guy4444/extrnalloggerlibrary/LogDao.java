@@ -1,4 +1,4 @@
-package guy4444.externallogger.LoggerDB;
+package guy4444.extrnalloggerlibrary;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -11,33 +11,33 @@ import java.util.List;
 public interface LogDao {
 
     @Query("SELECT * FROM logs_table")
-    List<Log> getAllLogs();
+    List<ExtLog> getAllLogs();
 
     @Query("SELECT * FROM logs_table WHERE time BETWEEN :start AND :end")
-    List<Log> getAllLogsBetweenDates(long start, long end);
+    List<ExtLog> getAllLogsBetweenDates(long start, long end);
 
     @Query("SELECT * FROM logs_table WHERE time > :start")
-    List<Log> getAllLogsFromDate(long start);
+    List<ExtLog> getAllLogsFromDate(long start);
 
 
     @Query("SELECT * FROM logs_table where tag LIKE :tag")
-    List<Log> getAllLogsByTag(String tag);
+    List<ExtLog> getAllLogsByTag(String tag);
 
     @Query("SELECT * FROM logs_table WHERE tag LIKE :tag AND time BETWEEN :start AND :end")
-    List<Log> getAllLogsByTagBetweenDates(long start, long end, String tag);
+    List<ExtLog> getAllLogsByTagBetweenDates(long start, long end, String tag);
 
     @Query("SELECT * FROM logs_table WHERE tag LIKE :tag AND time > :start")
-    List<Log> getAllLogsByTagFromDate(long start, String tag);
+    List<ExtLog> getAllLogsByTagFromDate(long start, String tag);
 
 
     @Query("SELECT * FROM logs_table where tag LIKE :tag AND text LIKE :text")
-    List<Log> getAllLogsByTagAndText(String tag, String text);
+    List<ExtLog> getAllLogsByTagAndText(String tag, String text);
 
     @Query("SELECT * FROM logs_table where tag LIKE :tag AND text LIKE :text AND time BETWEEN :start AND :end")
-    List<Log> getAllLogsByTagAndTextBetweenDates(long start, long end, String tag, String text);
+    List<ExtLog> getAllLogsByTagAndTextBetweenDates(long start, long end, String tag, String text);
 
     @Query("SELECT * FROM logs_table where tag LIKE :tag AND text LIKE :text AND time > :start")
-    List<Log> getAllLogsByTagAndTextFromDate(long start, String tag, String text);
+    List<ExtLog> getAllLogsByTagAndTextFromDate(long start, String tag, String text);
 
 
     @Query("SELECT COUNT(*) from logs_table")
@@ -47,8 +47,8 @@ public interface LogDao {
     void deleteAll();
 
     @Insert
-    void insertAll(Log... logs);
+    void insertAll(ExtLog... extLogs);
 
     @Delete
-    void delete(Log log);
+    void delete(ExtLog extLog);
 }

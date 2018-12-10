@@ -1,7 +1,6 @@
-package guy4444.externallogger.LoggerDB;
+package guy4444.extrnalloggerlibrary;
 
 import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
@@ -12,11 +11,11 @@ import android.widget.Toast;
 import java.util.List;
 
 
-@Database(entities = {Log.class}, version = 1)
+@Database(entities = {ExtLog.class}, version = 1)
 public abstract class MyLoggerDB extends RoomDatabase {
 
     public interface LoggerDBCallBack_LogsReturned {
-        public void logsReturned(List<Log> logs);
+        public void logsReturned(List<ExtLog> extLogs);
     }
 
     public interface LoggerDBCallBack_OnCompleted {
@@ -57,10 +56,10 @@ public abstract class MyLoggerDB extends RoomDatabase {
         });
     }
 
-    public void addLogToDB(final Log log, final LoggerDBCallBack_OnCompleted loggerDBCallBack_onCompleted) {
+    public void addLogToDB(final ExtLog extLog, final LoggerDBCallBack_OnCompleted loggerDBCallBack_onCompleted) {
         new Thread(new Runnable() {
             public void run() {
-                logDao().insertAll(log);
+                logDao().insertAll(extLog);
                 if (loggerDBCallBack_onCompleted != null) {
                     loggerDBCallBack_onCompleted.onCompleted();
                 }

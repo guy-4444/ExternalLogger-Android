@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
-import guy4444.externallogger.LoggerDB.Log;
-import guy4444.externallogger.LoggerDB.MyLoggerDB;
+import guy4444.extrnalloggerlibrary.ExtLog;
+import guy4444.extrnalloggerlibrary.MyLoggerDB;
 
 public class Activity_Main extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class Activity_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("External Logger Demo App");
@@ -52,13 +53,13 @@ public class Activity_Main extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log log = new Log("Click", "Button Clicked");
+                ExtLog log = new ExtLog("Click", "Button Clicked");
                 MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
                     @Override
                     public void onCompleted() {
                         MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                             @Override
-                            public void logsReturned(List<Log> logs) {
+                            public void logsReturned(List<ExtLog> logs) {
                                 updateText(logs);
                             }
                         });
@@ -72,7 +73,7 @@ public class Activity_Main extends AppCompatActivity {
             public void onClick(View v) {
                 MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
-                    public void logsReturned(List<Log> logs) {
+                    public void logsReturned(List<ExtLog> logs) {
                         updateText(logs);
                     }
                 });
@@ -84,7 +85,7 @@ public class Activity_Main extends AppCompatActivity {
             public void onClick(View v) {
                 MyLoggerDB.getInstance().getAllLogsByTag("Fab", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
-                    public void logsReturned(List<Log> logs) {
+                    public void logsReturned(List<ExtLog> logs) {
                         updateText(logs);
                     }
                 });
@@ -96,7 +97,7 @@ public class Activity_Main extends AppCompatActivity {
             public void onClick(View v) {
                 MyLoggerDB.getInstance().getAllLogsFromDate(lastCreateDate, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
-                    public void logsReturned(List<Log> logs) {
+                    public void logsReturned(List<ExtLog> logs) {
                         updateText(logs);
                     }
                 });
@@ -106,13 +107,13 @@ public class Activity_Main extends AppCompatActivity {
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log log = new Log("fab", "Button Clicked");
+                ExtLog log = new ExtLog("fab", "Button Clicked");
                 MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
                     @Override
                     public void onCompleted() {
                         MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                             @Override
-                            public void logsReturned(List<Log> logs) {
+                            public void logsReturned(List<ExtLog> logs) {
                                 updateText(logs);
                             }
                         });
@@ -132,7 +133,7 @@ public class Activity_Main extends AppCompatActivity {
 
         MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
             @Override
-            public void logsReturned(List<Log> logs) {
+            public void logsReturned(List<ExtLog> logs) {
                 updateText(logs);
             }
         });
@@ -154,7 +155,7 @@ public class Activity_Main extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateText(final List<Log> logs) {
+    private void updateText(final List<ExtLog> logs) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -162,7 +163,7 @@ public class Activity_Main extends AppCompatActivity {
                 String str = "";
                 if (logs != null) {
                     Collections.sort(logs);
-                    android.util.Log.d("pttt", "SIZE= " + logs.size());
+                    Log.d("pttt", "SIZE= " + logs.size());
                     for (int i = 0; i < logs.size(); i++) {
                         str += logs.get(i).getUid()
                                 + ". "
