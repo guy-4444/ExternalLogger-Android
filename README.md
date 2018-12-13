@@ -9,7 +9,7 @@ External logger library for android applications
 Vertical and horizontal step line indicator.
 
 
-![device-2018-06-06-144912](https://github.com/guy-4444/ExternalLogger-Android/blob/master/Screenshot.png?raw=true)
+![device-2018-06-06-144912](https://github.com/guy-4444/ExternalLogger-Android/blob/master/Screenshot2.png?raw=true)
 
 
 ## Setup
