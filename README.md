@@ -1,9 +1,15 @@
 # ExternalLogger-Android
-External logger library for android applications
+External logger library for android applications.
+You can save logs in any component in your app (Activity, Service, Fragment).
+The data will be stored in memory even after exiting the application or turning off the device.
+You can access the information at any time, export the data to an email, to a text file or to a server.
+The data can be accessed by the tag filter, text, or log creation time.
+The data will be deleted by a function under your control.
+
 
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/vlad1m1r990/Lemniscate/blob/master/LICENSE)
-[![](https://jitpack.io/v/guy-4444/StepLineIndicator.svg)](https://jitpack.io/#guy-4444/ExternalLogger-Android)
+[![](https://jitpack.io/v/guy-4444/ExternalLogger-Android.svg)](https://jitpack.io/#guy-4444/ExternalLogger-Android)
 [![API](https://img.shields.io/badge/API-15%2B-green.svg?style=flat)]()
 
 Vertical and horizontal step line indicator.
@@ -31,12 +37,11 @@ dependencies {
 ```
 ## Usage
 
-###### StepView Constructor:
+###### ExternalLogger Constructor:
 create Application Class (for example MyApplication.java):
 
 ```java
 public class MyApplication extends Application {
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -52,7 +57,7 @@ Declare name in manifest:
         android:name=".MyApplication"
         //......
 ```
-###### StepView Constructor parameters:
+###### ExternalLogger Functionss:
 
 **Create Log**
 ```java
@@ -70,12 +75,25 @@ MyLoggerDB.getInstance().addLogToDB(new ExtLog("Click", "Button Clicked"), null)
 
 ######Read all logs
 ```java
-    MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
-        @Override
-        public void logsReturned(List<ExtLog> logs) {
-           // ...
-        }
-    });
+MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+    @Override
+    public void logsReturned(List<ExtLog> logs) {
+       // ...
+    }
+})
+``` 
+#####get logn from last hour:
+```java
+                MyLoggerDB.getInstance().getAllLogsFromDate(System.currentTimeMillis() - 3600*1000l, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+    @Override
+    public void logsReturned(List<ExtLog> logs) {
+        updateText(logs);
+    }
+});
+```
+#####Delete all logs:
+```java
+MyLoggerDB.getInstance().deleteAll();
 ```
 ## Credits
 
