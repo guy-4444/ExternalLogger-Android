@@ -35,7 +35,7 @@ dependencies {
 create Application Class (for example MyApplication.java):
 
 ```java
-    public class MyApplication extends Application {
+public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
@@ -56,26 +56,26 @@ Declare name in manifest:
 
 **Create Log**
 ```java
-                ExtLog log = new ExtLog("Click", "Button Clicked");
-                MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
-                    @Override
-                    public void onCompleted() {
-                        // Do something
-                    }
-                });
+ExtLog log = new ExtLog("Click", "Button Clicked");
+MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
+    @Override
+    public void onCompleted() {
+        // Do something
+    }
+});
 		
-		//or without onCompletelistener.
-                MyLoggerDB.getInstance().addLogToDB(new ExtLog("Click", "Button Clicked"), null);
+//or without onCompletelistener.
+MyLoggerDB.getInstance().addLogToDB(new ExtLog("Click", "Button Clicked"), null);
 ```
 
 ######Read all logs
 ```java
-                MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
-                    @Override
-                    public void logsReturned(List<ExtLog> logs) {
-                       // ...
-                    }
-                });
+    MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+        @Override
+        public void logsReturned(List<ExtLog> logs) {
+           // ...
+        }
+    });
 ```
 ## Credits
 
