@@ -35,7 +35,7 @@ dependencies {
 create Application Class (for example MyApplication.java):
 
 ```java
-        public class MyApplication extends Application {
+    public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
