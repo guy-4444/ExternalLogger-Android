@@ -60,14 +60,12 @@ Declare name in manifest:
                 MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
                     @Override
                     public void onCompleted() {
-                        MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
-                            @Override
-                            public void logsReturned(List<ExtLog> logs) {
-                                updateText(logs);
-                            }
-                        });
+                        // Do something
                     }
                 });
+		
+		//or without onCompletelistener.
+                MyLoggerDB.getInstance().addLogToDB(new ExtLog("Click", "Button Clicked"), null);
 ```
 
 ######Read all logs
