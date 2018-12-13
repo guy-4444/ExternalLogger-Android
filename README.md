@@ -97,7 +97,7 @@ MyLoggerDB.getInstance().deleteAll();
 ```
 ## Credits
 
-Thanks to [vipulasri](https://github.com/vipulasri/Timeline-View)
+Room library to manage SQL easily
 
 ## License
 
