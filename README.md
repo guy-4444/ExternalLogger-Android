@@ -85,6 +85,7 @@ MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBac
 ``` 
 
 **Sort by time:**
+
 ExtLog has a buildin comparator to sort the logs by time
 ```java
 Collections.sort(logs);
