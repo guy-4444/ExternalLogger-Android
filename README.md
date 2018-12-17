@@ -83,9 +83,9 @@ MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBac
     }
 })
 ``` 
-**get logד from last hour:**
+**get logs from last hour:**
 ```java
-                MyLoggerDB.getInstance().getAllLogsFromDate(System.currentTimeMillis() - 3600*1000l, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+MyLoggerDB.getInstance().getAllLogsFromDate(System.currentTimeMillis() - 3600*1000l, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
     @Override
     public void logsReturned(List<ExtLog> logs) {
         updateText(logs);
