@@ -83,6 +83,13 @@ MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBac
     }
 })
 ``` 
+
+**Sort by time:**
+ExtLog has a buildin comparator to sort the logs by time
+```java
+Collections.sort(logs);
+``` 
+
 **get logs from last hour:**
 ```java
 MyLoggerDB.getInstance().getAllLogsFromDate(System.currentTimeMillis() - 3600*1000l, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
