@@ -74,6 +74,7 @@ MyLoggerDB.getInstance().addLogToDB(new ExtLog("Click", "Button Clicked"), null)
 ```
 
 **Read all logs:**
+You can filter the logs by tag (like this example), text or time.
 ```java
 MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
     @Override
@@ -82,7 +83,7 @@ MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBac
     }
 })
 ``` 
-**get logn from last hour:**
+**get logד from last hour:**
 ```java
                 MyLoggerDB.getInstance().getAllLogsFromDate(System.currentTimeMillis() - 3600*1000l, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
     @Override
