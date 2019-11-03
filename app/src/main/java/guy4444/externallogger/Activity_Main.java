@@ -189,6 +189,7 @@ public class Activity_Main extends AppCompatActivity {
                                 + "\n";
                     }
                 }
+                
                 data.setText(str);
             }
         });
