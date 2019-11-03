@@ -12,8 +12,6 @@ The data will be deleted by a function under your control.
 [![](https://jitpack.io/v/guy-4444/ExternalLogger-Android.svg)](https://jitpack.io/#guy-4444/ExternalLogger-Android)
 [![API](https://img.shields.io/badge/API-15%2B-green.svg?style=flat)]()
 
-Vertical and horizontal step line indicator.
-
 
 ![device-2018-06-06-144912](https://github.com/guy-4444/ExternalLogger-Android/blob/master/Screenshot2.png?raw=true)
 
@@ -32,35 +30,34 @@ Step 2. Add the dependency:
 
 ```
 dependencies {
-	implementation 'com.github.guy-4444:ExternalLogger-Android:1.00.02'
+	implementation 'com.github.guy-4444:ExternalLogger-Android:1.00.03'
 }
 ```
 ## Usage
 
 ### ExternalLogger Constructor:
-create Application Class (for example MyApplication.java):
+No Constructor needed anymore, it happens automatically with Content Provider.
 
-```java
-public class MyApplication extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        MyLoggerDB.initHelper(this);
-    }
-}
-
-```
-Declare name in manifest:
-```java
-    <application
-        android:name=".MyApplication"
-        //......
-```
 ### ExternalLogger Functions:
 
 **Create Log:**
 ```java
+// Simple call:
+MyLoggerDB.getInstance().addLogToDB("Life", "Activity Created");
+
+// Or create ExtLog first:
+MyLoggerDB.getInstance().addLogToDB(new ExtLog("Click", "Button Clicked"));
+
+
+// With onCompletelistener - Simple call:
+MyLoggerDB.getInstance().addLogToDB("Click", "Button Clicked", new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
+    @Override
+    public void onCompleted() {
+        // Do something
+    }
+});
+
+// With onCompletelistener - creating ExtLog first:
 ExtLog log = new ExtLog("Click", "Button Clicked");
 MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
     @Override
@@ -68,9 +65,7 @@ MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompl
         // Do something
     }
 });
-		
-//or without onCompletelistener.
-MyLoggerDB.getInstance().addLogToDB(new ExtLog("Click", "Button Clicked"), null);
+
 ```
 
 **Read all logs:**
@@ -79,7 +74,30 @@ You can filter the logs by tag (like this example), text or time.
 MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
     @Override
     public void logsReturned(List<ExtLog> logs) {
-       // ...
+    	// Run methid in UIThread !
+	// Because data processing happens in another hassle
+	runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss");
+                String str = "";
+                if (logs != null) {
+                    Collections.sort(logs);
+                    Log.d("pttt", "SIZE= " + logs.size());
+                    for (int i = 0; i < logs.size(); i++) {
+                        str += logs.get(i).getUid()
+                                + ". "
+                                + sdf.format(logs.get(i).getTime())
+                                + " - "
+                                + logs.get(i).getTag()
+                                + " "
+                                + logs.get(i).getText()
+                                + "\n";
+                    }
+                }
+                data.setText(str);
+            }
+        });
     }
 })
 ``` 
