@@ -12,8 +12,8 @@ The data will be deleted by a function under your control.
 [![](https://jitpack.io/v/guy-4444/ExternalLogger-Android.svg)](https://jitpack.io/#guy-4444/ExternalLogger-Android)
 [![API](https://img.shields.io/badge/API-15%2B-green.svg?style=flat)]()
 
+<img src="https://github.com/guy-4444/ExternalLogger-Android/blob/master/Screenshot3.png" width="288">
 
-![device-2018-06-06-144912](https://github.com/guy-4444/ExternalLogger-Android/blob/master/Screenshot3.png?raw=true)
 
 
 ## Setup
