@@ -1,2 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="guy4444.extrnalloggerlibrary" />
+    package="guy4444.extrnalloggerlibrary" >
+
+
+    <application>
+
+        <provider android:name=".LibraryInitProvider"
+            android:exported="false"
+            android:enabled="true"
+            android:authorities="extrnalloggerlibrary.LibraryInitProvider" />
+
+    </application>
+
+</manifest>
+
+

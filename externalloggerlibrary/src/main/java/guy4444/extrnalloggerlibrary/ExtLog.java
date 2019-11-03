@@ -1,8 +1,11 @@
 package guy4444.extrnalloggerlibrary;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "logs_table")
 public class ExtLog implements Comparable<ExtLog> {
@@ -19,7 +22,7 @@ public class ExtLog implements Comparable<ExtLog> {
     @ColumnInfo(name = "text")
     private String text;
 
-    public ExtLog(String tag, String text) {
+    public ExtLog(@NonNull String tag, String text) {
         this.tag = tag;
         this.text = text;
     }
@@ -36,7 +39,7 @@ public class ExtLog implements Comparable<ExtLog> {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(@NonNull String tag) {
         this.tag = tag;
     }
 

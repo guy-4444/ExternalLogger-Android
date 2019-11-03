@@ -1,12 +1,15 @@
 package guy4444.extrnalloggerlibrary;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import java.util.List;
 
@@ -23,7 +26,6 @@ public abstract class MyLoggerDB extends RoomDatabase {
     }
 
     private static MyLoggerDB instance;
-    private static Context appContext;
     public abstract LogDao logDao();
 
     public static MyLoggerDB getInstance() {
@@ -46,25 +48,35 @@ public abstract class MyLoggerDB extends RoomDatabase {
         instance = null;
     }
 
-    public void showToast(final String message) {
-        // If we put it into handler - we can call in from asynctask outside of main uithread
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(appContext, message, Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void addLogToDB(@NonNull final String tag, final String text) {
+        if (tag != null) {
+            addLogToDB(new ExtLog(tag, text));
+        }
     }
 
-    public void addLogToDB(final ExtLog extLog, final LoggerDBCallBack_OnCompleted loggerDBCallBack_onCompleted) {
-        new Thread(new Runnable() {
-            public void run() {
-                logDao().insertAll(extLog);
-                if (loggerDBCallBack_onCompleted != null) {
-                    loggerDBCallBack_onCompleted.onCompleted();
+    public void addLogToDB(@NonNull final String tag, final String text, final LoggerDBCallBack_OnCompleted loggerDBCallBack_onCompleted) {
+        if (tag != null) {
+            addLogToDB(new ExtLog(tag, text), loggerDBCallBack_onCompleted);
+        }
+    }
+
+    public void addLogToDB(@NonNull final ExtLog extLog) {
+        if (extLog != null) {
+            addLogToDB(extLog, null);
+        }
+    }
+
+    public void addLogToDB(@Nullable final ExtLog extLog, final LoggerDBCallBack_OnCompleted loggerDBCallBack_onCompleted) {
+        if (extLog != null) {
+            new Thread(new Runnable() {
+                public void run() {
+                    logDao().insertAll(extLog);
+                    if (loggerDBCallBack_onCompleted != null) {
+                        loggerDBCallBack_onCompleted.onCompleted();
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
 
     public void deleteAll() {

@@ -1,10 +1,9 @@
 package guy4444.externallogger;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.os.Handler;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -13,22 +12,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
 import guy4444.extrnalloggerlibrary.ExtLog;
 import guy4444.extrnalloggerlibrary.MyLoggerDB;
+import guy4444.extrnalloggerlibrary.MyLoggerDB_Impl;
 
 public class Activity_Main extends AppCompatActivity {
 
-    private TextView text;
+    private TextView data;
     private Button btn1;
     private Button btn2;
     private Button btn3;
     private Button btn4;
-    private FloatingActionButton fab1;
-    private FloatingActionButton fab2;
+    private FloatingActionButton fab_android;
+    private FloatingActionButton fab_apple;
     private long lastCreateDate = System.currentTimeMillis();
 
     @Override
@@ -36,42 +42,35 @@ public class Activity_Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mActionBarToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("External Logger Demo App");
 
-        text = (TextView) findViewById(R.id.text);
-        btn1 = (Button) findViewById(R.id.btn1);
-        btn2 = (Button) findViewById(R.id.btn2);
-        btn3 = (Button) findViewById(R.id.btn3);
-        btn4 = (Button) findViewById(R.id.btn4);
-        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        data = findViewById(R.id.data);
+        btn1 = findViewById(R.id.btn1);
+        btn2 = findViewById(R.id.btn2);
+        btn3 = findViewById(R.id.btn3);
+        btn4 = findViewById(R.id.btn4);
+        fab_android = findViewById(R.id.fab_android);
+        fab_apple = findViewById(R.id.fab_apple);
 
-        text.setMovementMethod(LinkMovementMethod.getInstance());
+        data.setMovementMethod(LinkMovementMethod.getInstance());
+
+        MyLoggerDB.getInstance().addLogToDB("Life", "Activity Created");
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                ExtLog log = new ExtLog("Click", "Button Clicked");
-                MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
-                    @Override
-                    public void onCompleted() {
-                        MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
-                            @Override
-                            public void logsReturned(List<ExtLog> logs) {
-                                updateText(logs);
-                            }
-                        });
-                    }
-                });
+            public void onClick(View view) {
+                MyLoggerDB.getInstance().deleteAll();
+                updateText(null);
+                Snackbar.make(view, "All data removed", Snackbar.LENGTH_LONG).setAction("got It", null).show();
             }
         });
 
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+            public void onClick(View view) {
+                MyLoggerDB.getInstance().getAllLogsByTag("Android", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
                     public void logsReturned(List<ExtLog> logs) {
                         updateText(logs);
@@ -82,8 +81,8 @@ public class Activity_Main extends AppCompatActivity {
 
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                MyLoggerDB.getInstance().getAllLogsByTag("Fab", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+            public void onClick(View view) {
+                MyLoggerDB.getInstance().getAllLogsByTag("Apple", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
                     public void logsReturned(List<ExtLog> logs) {
                         updateText(logs);
@@ -94,7 +93,7 @@ public class Activity_Main extends AppCompatActivity {
 
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 MyLoggerDB.getInstance().getAllLogsFromDate(lastCreateDate, new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
                     @Override
                     public void logsReturned(List<ExtLog> logs) {
@@ -104,10 +103,10 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
 
-        fab1.setOnClickListener(new View.OnClickListener() {
+        fab_android.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ExtLog log = new ExtLog("fab", "Button Clicked");
+                ExtLog log = new ExtLog("android", "Android Clicked");
                 MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
                     @Override
                     public void onCompleted() {
@@ -122,12 +121,21 @@ public class Activity_Main extends AppCompatActivity {
             }
         });
 
-        fab2.setOnClickListener(new View.OnClickListener() {
+        fab_apple.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyLoggerDB.getInstance().deleteAll();
-                updateText(null);
-                Snackbar.make(view, "All data removed", Snackbar.LENGTH_LONG).setAction("got It", null).show();
+                ExtLog log = new ExtLog("apple", "Apple Clicked");
+                MyLoggerDB.getInstance().addLogToDB(log, new MyLoggerDB.LoggerDBCallBack_OnCompleted() {
+                    @Override
+                    public void onCompleted() {
+                        MyLoggerDB.getInstance().getAllLogs(new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
+                            @Override
+                            public void logsReturned(List<ExtLog> logs) {
+                                updateText(logs);
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -148,11 +156,17 @@ public class Activity_Main extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            openAbout();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openAbout() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/guy-4444/ExternalLogger-Android"));
+        startActivity(browserIntent);
     }
 
     private void updateText(final List<ExtLog> logs) {
@@ -175,7 +189,7 @@ public class Activity_Main extends AppCompatActivity {
                                 + "\n";
                     }
                 }
-                text.setText(str);
+                data.setText(str);
             }
         });
     }

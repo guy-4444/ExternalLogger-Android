@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,7 +32,7 @@
                 android:lines="3"
                 android:maxLines="3"
                 android:minLines="3"
-                android:text="add click event" />
+                android:text="remove all logs" />
 
             <Button
                 android:id="@+id/btn2"
@@ -44,7 +45,7 @@
                 android:lines="3"
                 android:maxLines="3"
                 android:minLines="3"
-                android:text="show click events" />
+                android:text="show android events" />
 
             <Button
                 android:id="@+id/btn3"
@@ -57,7 +58,7 @@
                 android:lines="3"
                 android:maxLines="3"
                 android:minLines="3"
-                android:text="show fab events" />
+                android:text="show apple events" />
 
             <Button
                 android:id="@+id/btn4"
@@ -70,17 +71,22 @@
                 android:lines="3"
                 android:maxLines="3"
                 android:minLines="3"
-                android:text="from create time" />
+                android:text="show from last open time" />
+
         </LinearLayout>
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linear"
-            android:text="Hello World!" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Hello World!"
+            android:textColor="#000000"
+            android:textSize="12sp"/>
 
     </RelativeLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
