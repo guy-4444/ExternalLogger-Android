@@ -74,8 +74,8 @@ You can filter the logs by tag (like this example), text or time.
 MyLoggerDB.getInstance().getAllLogsByTag("Click", new MyLoggerDB.LoggerDBCallBack_LogsReturned() {
     @Override
     public void logsReturned(List<ExtLog> logs) {
-    	// Run methid in UIThread !
-	// Because data processing happens in another hassle
+    	// Run method in UIThread !
+	// Because data processing happens external to the UI thread
 	runOnUiThread(new Runnable() {
             @Override
             public void run() {
