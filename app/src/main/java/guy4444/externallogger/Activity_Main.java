@@ -18,13 +18,16 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
 import guy4444.extrnalloggerlibrary.ExtLog;
 import guy4444.extrnalloggerlibrary.MyLoggerDB;
-import guy4444.extrnalloggerlibrary.MyLoggerDB_Impl;
 
 public class Activity_Main extends AppCompatActivity {
 
@@ -41,7 +44,7 @@ public class Activity_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         Toolbar mActionBarToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
         getSupportActionBar().setTitle("External Logger Demo App");
@@ -174,23 +177,24 @@ public class Activity_Main extends AppCompatActivity {
             @Override
             public void run() {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm:ss");
-                String str = "";
+                StringBuilder sb = new StringBuilder();
                 if (logs != null) {
                     Collections.sort(logs);
                     Log.d("pttt", "SIZE= " + logs.size());
                     for (int i = 0; i < logs.size(); i++) {
-                        str += logs.get(i).getUid()
+                        sb.append(logs.get(i).getUid()
                                 + ". "
                                 + sdf.format(logs.get(i).getTime())
                                 + " - "
                                 + logs.get(i).getTag()
                                 + " "
                                 + logs.get(i).getText()
-                                + "\n";
+                                );
+                        sb.append("\n");
                     }
                 }
 
-                data.setText(str);
+                data.setText(sb.toString());
             }
         });
     }

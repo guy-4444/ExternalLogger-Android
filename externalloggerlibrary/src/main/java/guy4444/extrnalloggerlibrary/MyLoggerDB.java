@@ -18,11 +18,11 @@ import java.util.List;
 public abstract class MyLoggerDB extends RoomDatabase {
 
     public interface LoggerDBCallBack_LogsReturned {
-        public void logsReturned(List<ExtLog> extLogs);
+        void logsReturned(List<ExtLog> extLogs);
     }
 
     public interface LoggerDBCallBack_OnCompleted {
-        public void onCompleted();
+        void onCompleted();
     }
 
     private static MyLoggerDB instance;

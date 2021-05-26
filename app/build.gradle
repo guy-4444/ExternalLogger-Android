@@ -19,8 +19,7 @@ android {
 }
 
 ext {
-    roomVersion = '1.1.1'
-    archLifecycleVersion = '1.1.1'
+    roomVersion = '2.2.5'
 }
 
 dependencies {
@@ -32,13 +31,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    // Room components
+    implementation project(path: ':externalloggerlibrary')
+
+    // Room
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
     androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
-
-    // Lifecycle components
-    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
-    compile project(path: ':externalloggerlibrary')
 }

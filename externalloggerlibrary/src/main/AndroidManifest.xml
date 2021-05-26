@@ -4,10 +4,12 @@
 
     <application>
 
-        <provider android:name=".LibraryInitProvider"
+        <provider
+            android:name=".LibraryInitProvider"
+            android:authorities="${applicationId}.LibraryInitProvider"
             android:exported="false"
             android:enabled="true"
-            android:authorities="extrnalloggerlibrary.LibraryInitProvider" />
+            />
 
     </application>
 
